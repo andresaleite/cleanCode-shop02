@@ -22,7 +22,7 @@ public class OrderService {
 	private ProductService produtoService;
 	
 	private static Double VALOR_FIXO_DISTANCIA = 1000.0;
-	private static int VALOR_DENOMINADOR = 1000;
+	private static int VALOR_DENOMINADOR = 100;
 	private static Double VALOR_MINIMO_FRETE = 10.0;
 	private static Double VALOR_FORMULA_FRETE = 100.0;
 	
