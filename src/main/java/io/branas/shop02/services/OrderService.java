@@ -1,7 +1,5 @@
 package io.branas.shop02.services;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +18,21 @@ public class OrderService {
 	private OrderRepository repository;
 	@Autowired
 	private CouponService serviceCoupon;
+	@Autowired
+	private ProductService produtoService;
+	
+	private static Double VALOR_FIXO_DISTANCIA = 1000.0;
+	private static int VALOR_DENOMINADOR = 1000;
+	private static Double VALOR_MINIMO_FRETE = 10.0;
+	private static Double VALOR_FORMULA_FRETE = 100.0;
 	
 	@Transactional
 	public OrderDTO insert(OrderDTO dto) {
-		dto.setProducts(returnProductsValids(dto.getProducts()));
+		try {
+			dto.setProducts(produtoService.returnProductsValids(dto.getProducts()));
+		} catch (Throwable e) {
+			return null;
+		}
 		if(ValidaCPF.isCpfValido(dto.getCpf()) && dto.getProducts().size() > 0) {
 			Order entity = new Order();
 			entity.setCpf(dto.getCpf());
@@ -31,7 +40,9 @@ public class OrderService {
 			entity.setProducts(dto.getProducts());
 			entity.setCoupon(serviceCoupon.isTheCouponValid(dto.getCoupon()));
 			entity.setDate(Instant.now());
-			entity.setTotal(this.calculaTotal(entity.getCoupon(), dto));
+			entity.setFrete(this.calculaFrete(dto));
+			entity.setDistancia(VALOR_FIXO_DISTANCIA);
+			entity.setTotal(this.calculaTotal(entity.getCoupon(), dto, entity.getFrete()));
 			entity = repository.save(entity);
 			return new OrderDTO(entity);
 		} else {
@@ -39,26 +50,34 @@ public class OrderService {
 		}
 	}
 	
-	private Set<Product> returnProductsValids(Set<Product> products) {
-		Set<Product> produtosValidos = new HashSet<Product>();
-		for(Product produto: products) {
-			if(produto.getQuantity()> 0) {
-				produtosValidos.add(produto);
-			}
+	private Double calculaFrete(OrderDTO dto) {
+		Double frete = 0.0;
+		for(Product produto: dto.getProducts()) {
+			Double larguraEmMetro = transformaCentimetroEmMetro(produto.getLargura());
+			Double alturaEmMetro = transformaCentimetroEmMetro(produto.getAltura());
+			Double profundidadeEmMetro = transformaCentimetroEmMetro(produto.getProfundidade());
+			Double volume = larguraEmMetro * alturaEmMetro * profundidadeEmMetro;
+			Double densidade = produto.getPeso() / volume;
+			frete += VALOR_FIXO_DISTANCIA * volume * densidade/VALOR_FORMULA_FRETE;
 		}
-		return produtosValidos;
+		System.out.println("Frete: "+frete);
+		return frete < VALOR_MINIMO_FRETE ? VALOR_MINIMO_FRETE : frete;
 	}
 
-	private Double calculaTotal(Coupon coupon, OrderDTO dto) {
+	private Double transformaCentimetroEmMetro(Double valor) {
+		return valor / VALOR_DENOMINADOR;
+	}
+
+	private Double calculaTotal(Coupon coupon, OrderDTO dto, Double frete) {
 		Double total = 0.0;
 		for(Product produto: dto.getProducts()) {
 			total += produto.getPrice() * produto.getQuantity();
 		}
 		if(coupon.getValor() > 0) {
-			return total - total/coupon.getValor();
+			total = total - coupon.getValor()/100;
+			return total + frete;
 		}
-		
-		return total;
+		return total + frete;
 	}
 	
 }

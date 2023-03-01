@@ -14,6 +14,7 @@ public class OrderDTO implements Serializable {
 	private Set<Product> products;
 	private Double total;
 	private String coupon;
+	private Double frete;
 	
 	public OrderDTO() {	}
 	public OrderDTO(Long id, String cpf, Set<Product> products,Double total, String coupon ) {
@@ -29,6 +30,7 @@ public class OrderDTO implements Serializable {
 		this.products = order.getProducts();
 		this.total = order.getTotal();
 		this.coupon = order.getCoupon().getName();
+		this.frete = order.getFrete();
 	}
 	public Long getId() {
 		return id;
@@ -59,6 +61,12 @@ public class OrderDTO implements Serializable {
 	}
 	public void setCoupon(String coupon) {
 		this.coupon = coupon;
+	}
+	public Double getFrete() {
+		return frete;
+	}
+	public void setFrete(Double frete) {
+		this.frete = frete;
 	}
 	
 

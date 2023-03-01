@@ -32,6 +32,8 @@ public class Order implements Serializable {
 	private Coupon coupon;
 	private String cpf;
 	private Double total;
+	private Double frete;
+	private Double distancia;
 
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant date;
@@ -43,11 +45,15 @@ public class Order implements Serializable {
 	private Set<Product> products = new HashSet<Product>();
 	
 	public Order() {}
-	public Order(Long id, Coupon coupon, String cpf, Double total, Instant date, Set<Product> products) {
+	public Order(Long id, Coupon coupon, String cpf, 
+			Double total, Double frete, Double distancia, Instant date,
+			Set<Product> products) {
 		this.id = id;
 		this.coupon = coupon;
 		this.cpf = cpf;
 		this.total = total;
+		this.frete = frete;
+		this.distancia = distancia;
 		this.date = date;
 		this.products = products;
 	}
@@ -113,10 +119,20 @@ public class Order implements Serializable {
 	public Double getTotal() {
 		return total;
 	}
-
-
 	public void setTotal(Double total) {
 		this.total = total;
+	}
+	public Double getFrete() {
+		return frete;
+	}
+	public void setFrete(Double frete) {
+		this.frete = frete;
+	}
+	public Double getDistancia() {
+		return distancia;
+	}
+	public void setDistancia(Double distancia) {
+		this.distancia = distancia;
 	}
 
 	

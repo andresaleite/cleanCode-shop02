@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import io.branas.shop02.dto.ProductDTO;
+
 @Entity
 @Table(name = "tb_product")
 public class Product implements Serializable {
@@ -48,6 +50,19 @@ public class Product implements Serializable {
 		this.largura = largura;
 		this.profundidade = profundidade;
 		this.peso = peso;
+	}
+	public Product(ProductDTO dto) {
+		this.id = dto.getId();
+		this.name = dto.getName();
+		this.description = dto.getDescription();
+		this.price = dto.getPrice();
+		this.imgUrl = dto.getImgUrl();
+		this.quantity = dto.getQuantity();
+		this.date = dto.getDate();
+		this.altura = dto.getAltura();
+		this.largura = dto.getLargura();
+		this.profundidade = dto.getProfundidade();
+		this.peso = dto.getPeso();
 	}
 	public Long getId() {
 		return id;

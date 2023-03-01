@@ -20,13 +20,13 @@ public class CouponService {
 	}
 	
 	public Coupon isTheCouponValid(String name) {
-		Coupon coupon = new Coupon(1L, name, null, 0.0);
-		if(name == null || "".equals(name)) {
+		Coupon coupon = new Coupon();
+		if("".equals(name)) {
 			return coupon;
 		}
 		coupon = this.findByName(name);
 		if(coupon == null) 
-			return new Coupon(1L, name, null, 0.0);
+			return new Coupon();
 		return validaDataCoupon(coupon);
 	}
 
