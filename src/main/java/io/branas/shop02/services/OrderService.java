@@ -58,9 +58,8 @@ public class OrderService {
 			Double profundidadeEmMetro = transformaCentimetroEmMetro(produto.getProfundidade());
 			Double volume = larguraEmMetro * alturaEmMetro * profundidadeEmMetro;
 			Double densidade = produto.getPeso() / volume;
-			frete += VALOR_FIXO_DISTANCIA * volume * densidade/VALOR_FORMULA_FRETE;
+			frete += produto.getQuantity() * VALOR_FIXO_DISTANCIA * volume * densidade/VALOR_FORMULA_FRETE;
 		}
-		System.out.println("Frete: "+frete);
 		return frete < VALOR_MINIMO_FRETE ? VALOR_MINIMO_FRETE : frete;
 	}
 

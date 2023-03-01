@@ -19,20 +19,20 @@ public class Factory {
 	}
 
 	public static Product createProduct() {
-		Product product = new Product(1L, "Phone", "Good Phone", 800.0, "https://img.com/img.png", 1,
-				Instant.parse("2020-10-20T03:00:00Z"), 1.1, 15.1, 8.1, 1.5);
+		Product product = new Product(1L, "Phone", "Good Phone", 1000.0, "https://img.com/img.png", 1,
+				Instant.parse("2020-10-20T03:00:00Z"), 100.0, 30.0, 10.0, 3.0);
 		return product;
 	}
 
 	public static Product createProduct0() {
-		Product product = new Product(1L, "Camera", "Camera", 100.0, "https://img.com/img.png", 2,
-				Instant.parse("2020-10-20T03:00:00Z"),20.0, 15.0, 10.0, 1.0);
+		Product product = new Product(1L, "Camera", "Camera", 5000.0, "https://img.com/img.png", 2,
+				Instant.parse("2020-10-20T03:00:00Z"),50.0, 50.0, 50.0, 22.0);
 		return product;
 	}
 
 	public static Product createProduct1() {
-		Product product = new Product(10L, "Clean Code", "Livro de blá blá", 65.0, "https://img.com/img.png", 2,
-				Instant.parse("2023-01-20T03:00:00Z"),5.3, 15.0, 20.1, 0.8);
+		Product product = new Product(10L, "Clean Code", "Livro de blá blá", 30.0, "https://img.com/img.png", 1,
+				Instant.parse("2023-01-20T03:00:00Z"),10.0, 10.0, 10.0, 0.9);
 		return product;
 	}
 	

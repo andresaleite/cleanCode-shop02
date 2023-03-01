@@ -54,8 +54,8 @@ public class OrderControllerIT {
 		
 		result.andExpect(jsonPath("$.id").exists());
 		result.andExpect(jsonPath("$.coupon").value(""));
-		result.andExpect(jsonPath("$.total").value(1006.0));
-		result.andExpect(jsonPath("$.frete").value(27.0));
+		result.andExpect(jsonPath("$.total").value(1122));
+		result.andExpect(jsonPath("$.frete").value(43.0));
 		result.andExpect(status().isCreated());
 		assertEquals(914, dto.getTotal());
 	}
@@ -76,8 +76,8 @@ public class OrderControllerIT {
 		
 		result.andExpect(jsonPath("$.id").exists());
 		result.andExpect(jsonPath("$.coupon").value("COMPRA10"));
-		result.andExpect(jsonPath("$.total").value(1005.9));
-		result.andExpect(jsonPath("$.frete").value(27.0));
+		result.andExpect(jsonPath("$.total").value(1121.9));
+		result.andExpect(jsonPath("$.frete").value(43.0));
 		result.andExpect(status().isCreated());
 		assertEquals(914, dto.getTotal());
 	}
@@ -100,6 +100,7 @@ public class OrderControllerIT {
 		result.andExpect(jsonPath("$.id").exists());
 		result.andExpect(jsonPath("$.coupon").value("DESC5"));
 		result.andExpect(status().isCreated());
+		result.andExpect(jsonPath("$.frete").value(43.0));
 		assertEquals(914, dto.getTotal());
 	}
 	
@@ -165,6 +166,48 @@ public class OrderControllerIT {
 	}
 	
 	@Test
+	public void insertShouldInsertOneProductWithFrete() throws Exception {
+		Set<Product> products = new HashSet<Product>();
+		products.add(Factory.createProduct());
+		Order order = Factory.createOrder(products, null,822.6);
+		OrderDTO dto = Factory.createOrderDTO(order);
+		String jsonBody = objectMapper.writeValueAsString(dto);
+		ResultActions result =
+				mockMvc.perform(post("/orders")
+						.content(jsonBody)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(status().isCreated());
+		result.andExpect(jsonPath("$.coupon").value(""));
+		result.andExpect(jsonPath("$.frete").value(30));
+		result.andExpect(jsonPath("$.total").value(1030.0));
+	}	
+	@Test
+	public void insertShouldInsertThreeProductWithFrete() throws Exception {
+		Set<Product> products = new HashSet<Product>();
+		Product produto = Factory.createProduct();
+		produto.setQuantity(3);
+		products.add(produto);
+		
+		Order order = Factory.createOrder(products, null,822.6);
+		OrderDTO dto = Factory.createOrderDTO(order);
+		String jsonBody = objectMapper.writeValueAsString(dto);
+		ResultActions result =
+				mockMvc.perform(post("/orders")
+						.content(jsonBody)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(status().isCreated());
+		result.andExpect(jsonPath("$.coupon").value(""));
+		result.andExpect(jsonPath("$.frete").value(90));
+		result.andExpect(jsonPath("$.total").value(3090.0));
+	}	
+	
+	@Test
 	public void insertShouldInsertWithCouponResource() throws Exception {
 		Set<Product> products = new HashSet<Product>();
 		products.add(Factory.createProduct());
@@ -182,7 +225,7 @@ public class OrderControllerIT {
 		result.andExpect(jsonPath("$.id").exists());
 		result.andExpect(status().isCreated());
 		result.andExpect(jsonPath("$.coupon").value("COMPRA10"));
-		result.andExpect(jsonPath("$.total").value(1005.9));
+		result.andExpect(jsonPath("$.total").value(1121.9));
 	}	
 	@Test
 	public void insertShouldInsertWithCouponEFreteResource() throws Exception {
@@ -200,8 +243,8 @@ public class OrderControllerIT {
 		result.andExpect(jsonPath("$.id").exists());
 		result.andExpect(status().isCreated());
 		result.andExpect(jsonPath("$.coupon").value("COMPRA10"));
-		result.andExpect(jsonPath("$.total").value(209.9));
-		result.andExpect(jsonPath("$.frete").value(10));
+		result.andExpect(jsonPath("$.total").value(10439.9));
+		result.andExpect(jsonPath("$.frete").value(440));
 	}	
 	@Test
 	public void insertShouldInsertWithCouponEFreteMenorQue10Resource() throws Exception {
